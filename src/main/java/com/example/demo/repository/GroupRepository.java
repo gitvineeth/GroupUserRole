@@ -8,9 +8,10 @@ import org.springframework.stereotype.Repository;
 import com.example.demo.entity.GroupEntity;
 
 @Repository
-public interface GroupRepository extends JpaRepository<GroupEntity,Integer> {
-	
+public interface GroupRepository extends JpaRepository<GroupEntity, Integer> {
+
 	public Optional<GroupEntity> findByGroupId(String string);
-	public GroupEntity findBygroupCode(String groupCode);
+
+	public GroupEntity findByGroupCode(String groupCode);
 
 }
