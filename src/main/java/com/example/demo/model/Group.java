@@ -18,6 +18,8 @@ public class Group {
 	private String[] roles;
 	@NotNull
 	private String groupDescription;
+	
+	private String groupId;
 
 	public Group() {
 		super();
@@ -53,5 +55,15 @@ public class Group {
 	public void setRoles(String[] roles) {
 		this.roles = roles;
 	}
+
+	public String getGroupId() {
+		return groupId;
+	}
+
+	public void setGroupId(String groupId) {
+		this.groupId = groupId;
+	}
+	
+	
 
 }

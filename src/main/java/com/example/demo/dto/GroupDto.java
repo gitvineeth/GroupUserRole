@@ -45,5 +45,8 @@ public class GroupDto {
 	public void setGroupDescription(String groupDescription) {
 		this.groupDescription = groupDescription;
 	}
+
+
+	
 	
 }
