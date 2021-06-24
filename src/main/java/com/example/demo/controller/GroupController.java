@@ -8,6 +8,7 @@ import org.apache.catalina.mbeans.GroupMBean;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,7 +32,6 @@ public class GroupController {
 
 	@PostMapping("/auth/userGroups")
 	public GroupResonse addGroup(@RequestBody Group group) {
-		System.out.println("endpoint hit");
 		ModelMapper model = new ModelMapper();
 		GroupDto groupDto = model.map(group, GroupDto.class);
 		GroupDto fromService = groupService.createGroup(groupDto);
@@ -45,6 +45,9 @@ public class GroupController {
 		ModelMapper mapper = new ModelMapper();
 
 		List<GroupDto> groupList = groupService.findAll();
+		if(org.springframework.util.CollectionUtils.isEmpty(groupList)) {
+			throw new RuntimeException("No records are available");
+		}
 		List<GroupResonse> groupListAsResponse = Arrays.asList(mapper.map(groupList, GroupResonse[].class));
 		return groupListAsResponse;
 	}

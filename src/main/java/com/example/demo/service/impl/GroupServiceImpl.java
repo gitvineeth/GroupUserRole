@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.servlet.handler.UserRoleAuthorizationInterceptor;
 
 import com.example.demo.dto.GroupDto;
@@ -32,7 +33,9 @@ public class GroupServiceImpl implements GroupService {
 
 		ModelMapper mapper = new ModelMapper();
 		GroupEntity groupEntity = mapper.map(groupDto, GroupEntity.class);
+		if(groupRepository.findBygroupCode(groupEntity.getGroupCode())!=null) throw new RuntimeException("Group Code already exists");
 		groupEntity.setGroupId(utils.generateUserId(10));
+		
 		GroupEntity fromRepo = groupRepository.save(groupEntity);
 		GroupDto backToController = mapper.map(fromRepo, GroupDto.class);
 		return backToController;
@@ -44,6 +47,7 @@ public class GroupServiceImpl implements GroupService {
 
 		ModelMapper mapper = new ModelMapper();
 		List<GroupEntity> groupList = groupRepository.findAll();
+		if(CollectionUtils.isEmpty(groupList)) throw new RuntimeException("Empty Group List");
 		List<GroupDto> groupListToController = Arrays.asList(mapper.map(groupList, GroupDto[].class));
 		return groupListToController;
 	}
@@ -52,6 +56,7 @@ public class GroupServiceImpl implements GroupService {
 	public GroupDto updateGroup(GroupDto groupDto) {
         
 		Optional<GroupEntity> group = groupRepository.findByGroupId(groupDto.getGroupId());
+		if(!group.isPresent()) throw new RuntimeException("No such group exists");
 		GroupEntity entity = group.get();
 		entity.setGroupCode(groupDto.getGroupCode());
 		entity.setRoles(groupDto.getRoles());
@@ -67,6 +72,9 @@ public class GroupServiceImpl implements GroupService {
 	public void deleteUserById(String id) {
 		
 		Optional<GroupEntity> user = groupRepository.findByGroupId(id);
+		if(!user.isPresent()) {
+			throw new RuntimeException("No such Group exists");
+		}
 		GroupEntity deletedUser = user.get();
 		groupRepository.delete(deletedUser);
 		

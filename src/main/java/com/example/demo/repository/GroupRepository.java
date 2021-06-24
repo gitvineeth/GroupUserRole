@@ -11,5 +11,6 @@ import com.example.demo.entity.GroupEntity;
 public interface GroupRepository extends JpaRepository<GroupEntity,Integer> {
 	
 	public Optional<GroupEntity> findByGroupId(String string);
+	public GroupEntity findBygroupCode(String groupCode);
 
 }
